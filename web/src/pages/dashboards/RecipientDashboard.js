@@ -109,6 +109,8 @@ function RequestCard({ req }) {
   const s = STATUS[req.status] || STATUS.pending;
   const urgencyColor = { critical: '#ff453a', urgent: '#ff9f0a', normal: '#0a84ff' };
   const uc = urgencyColor[req.urgency] || '#0a84ff';
+  const isFulfilled = req.status === 'fulfilled';
+  const sourceType = req.matchedHospital ? 'hospital' : req.fulfilledBy?.role === 'donor' ? 'donor' : null;
 
   return (
     <div style={{ ...styles.reqCard, borderTop: '2px solid ' + uc }}>
@@ -119,19 +121,67 @@ function RequestCard({ req }) {
       <div style={styles.reqUnits}>{req.units} unit(s)</div>
       {req.hospital && <div style={styles.reqHospital}>🏥 {req.hospital}</div>}
       {req.address && <div style={styles.reqAddr}>📍 {req.address}</div>}
+
+      {isFulfilled && sourceType && (
+        <div style={styles.sourceBox}>
+          <div style={styles.sourceTitle}>🩸 Blood received from</div>
+          {sourceType === 'hospital' && req.matchedHospital && (
+            <div style={styles.sourceRow}>
+              <div style={styles.sourceIconWrap}>🏥</div>
+              <div>
+                <div style={styles.sourceName}>{req.matchedHospital.name}</div>
+                {req.matchedHospital.address && <div style={styles.sourceAddr}>{req.matchedHospital.address}</div>}
+                <div style={styles.sourceTag}>Blood Bank / Hospital</div>
+              </div>
+            </div>
+          )}
+          {sourceType === 'donor' && req.fulfilledBy && (
+            <div style={styles.sourceRow}>
+              <div style={styles.sourceIconWrap}>🩸</div>
+              <div>
+                <div style={styles.sourceName}>{req.fulfilledBy.name}</div>
+                <div style={styles.sourceTag}>Individual Donor</div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div style={styles.reqFooter}>
         <span style={{ ...styles.urgencyTag, background: uc + '15', color: uc }}>{req.urgency}</span>
         {req.priorityMode && <span style={styles.priorityTag}>⚡ Priority</span>}
         <span style={styles.reqDate}>{new Date(req.createdAt).toLocaleDateString()}</span>
       </div>
-      {req.matchedDonors?.length > 0 && (
-        <div style={styles.matchedInfo}>
-          ✓ {req.matchedDonors.length} donor(s) matched
+      {req.matchedDonors?.length > 0 && req.status !== 'fulfilled' && (
+        <div style={styles.matchedInfo}>✓ {req.matchedDonors.length} donor(s) matched</div>
+      )}
+      {req.status === 'fulfilled' && (req.matchedHospital || req.fulfilledBy) && (
+        <div style={styles.sourceBox}>
+          <div style={styles.sourceTitle}>🩸 Blood received from</div>
+          {req.matchedHospital ? (
+            <div style={styles.sourceRow}>
+              <span style={{ fontSize: 20 }}>🏥</span>
+              <div>
+                <div style={styles.sourceName}>{req.matchedHospital.name}</div>
+                {req.matchedHospital.address && <div style={styles.sourceAddr}>{req.matchedHospital.address}</div>}
+                <div style={styles.sourceTag}>Blood Bank / Hospital</div>
+              </div>
+            </div>
+          ) : (
+            <div style={styles.sourceRow}>
+              <span style={{ fontSize: 20 }}>🩸</span>
+              <div>
+                <div style={styles.sourceName}>{req.fulfilledBy?.name || 'Anonymous Donor'}</div>
+                <div style={styles.sourceTag}>Individual Donor</div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
+
 
 const styles = {
   page: { maxWidth: 1200, margin: '0 auto', padding: '32px 24px' },
@@ -166,6 +216,12 @@ const styles = {
   priorityTag: { background: 'rgba(255,45,85,0.2)', color: '#ff2d55', padding: '2px 8px', borderRadius: 50, fontSize: 11, fontWeight: 600 },
   reqDate: { fontSize: 11, color: 'rgba(255,255,255,0.3)', marginLeft: 'auto' },
   matchedInfo: { marginTop: 10, fontSize: 12, color: '#30d158', background: 'rgba(48,209,88,0.1)', padding: '6px 10px', borderRadius: 8 },
+  sourceBox: { marginTop: 10, background: 'rgba(255,45,85,0.08)', border: '1px solid rgba(255,45,85,0.2)', borderRadius: 10, padding: '12px 14px' },
+  sourceTitle: { fontSize: 11, fontWeight: 700, color: '#ff2d55', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 8 },
+  sourceRow: { display: 'flex', alignItems: 'flex-start', gap: 10 },
+  sourceName: { fontWeight: 700, color: 'white', fontSize: 14 },
+  sourceAddr: { fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 2 },
+  sourceTag: { fontSize: 11, color: '#ff2d55', marginTop: 3, fontWeight: 600 },
   historyList: { display: 'flex', flexDirection: 'column', gap: 8 },
   historyRow: { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 },
   btBadge: { width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 12, flexShrink: 0 }

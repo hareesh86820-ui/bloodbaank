@@ -196,7 +196,11 @@ const triggerMatching = async (request) => {
 exports.getRequests = async (req, res) => {
   try {
     const filter = req.user.role === 'recipient' ? { recipient: req.user._id } : {};
-    const requests = await BloodRequest.find(filter).populate('recipient', 'name phone').sort('-createdAt');
+    const requests = await BloodRequest.find(filter)
+      .populate('recipient', 'name phone')
+      .populate('fulfilledBy', 'name phone role')
+      .populate('matchedHospital', 'name address')
+      .sort('-createdAt');
     res.json(requests);
   } catch (err) {
     res.status(500).json({ message: err.message });
