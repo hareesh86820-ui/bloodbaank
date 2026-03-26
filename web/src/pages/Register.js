@@ -32,7 +32,7 @@ export default function Register() {
   const [resendTimer, setResendTimer] = useState(0);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-  const showAge = NEEDS_AGE.includes(form.role);
+  const showAge = form.role !== '' && NEEDS_AGE.includes(form.role);
 
   const startResendTimer = () => {
     setResendTimer(30); // 30 seconds resend cooldown
@@ -125,15 +125,6 @@ export default function Register() {
               <label style={{ marginTop: 12 }}>Phone Number</label>
               <input placeholder="+1 234 567 8900" value={form.phone} onChange={e => set('phone', e.target.value)} required />
 
-              {/* Age — only for donor and recipient */}
-              {showAge && (
-                <>
-                  <label>Age</label>
-                  <input type="number" placeholder="25" min="1" max="120"
-                    value={form.age} onChange={e => set('age', e.target.value)} required />
-                </>
-              )}
-
               <label>Password</label>
               <input type="password" placeholder="Min. 8 characters" value={form.password} onChange={e => set('password', e.target.value)} required />
 
@@ -150,6 +141,15 @@ export default function Register() {
                   </div>
                 ))}
               </div>
+
+              {/* Age — only shows after selecting donor or recipient */}
+              {showAge && (
+                <>
+                  <label style={{ marginTop: 4 }}>Age</label>
+                  <input type="number" placeholder="25" min="1" max="120"
+                    value={form.age} onChange={e => set('age', e.target.value)} required />
+                </>
+              )}
 
               <button style={S.primaryBtn} onClick={handleSendOTP}
                 disabled={!form.role || !form.name || !form.email || otpLoading}>
