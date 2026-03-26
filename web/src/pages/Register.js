@@ -119,6 +119,8 @@ export default function Register() {
               {otpError && <div style={styles.otpError}>{otpError}</div>}
               <label style={{ marginTop: 12 }}>Phone Number</label>
               <input placeholder="+1 234 567 8900" value={form.phone} onChange={e => set('phone', e.target.value)} required />
+              <label>Age</label>
+              <input type="number" placeholder="25" min="1" max="120" value={form.age} onChange={e => set('age', e.target.value)} required />
               <label>Password</label>
               <input type="password" placeholder="Min. 8 characters" value={form.password} onChange={e => set('password', e.target.value)} required />
               <label style={{ marginBottom: 12 }}>Select Your Role</label>
@@ -191,10 +193,8 @@ export default function Register() {
                       <div key={bt} style={{ ...styles.btCard, ...(form.bloodType === bt ? styles.btCardActive : {}) }} onClick={() => set('bloodType', bt)}>{bt}</div>
                     ))}
                   </div>
-                  <div style={{ display: 'flex', gap: 12 }}>
-                    <div style={{ flex: 1 }}><label>Age</label><input type="number" placeholder="25" value={form.age} onChange={e => set('age', e.target.value)} required /></div>
-                    <div style={{ flex: 1 }}><label>Weight (kg)</label><input type="number" placeholder="70" value={form.weight} onChange={e => set('weight', e.target.value)} required /></div>
-                  </div>
+                  <label>Weight (kg)</label>
+                  <input type="number" placeholder="70" value={form.weight} onChange={e => set('weight', e.target.value)} required />
                   <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', marginBottom: 16, textTransform: 'none', letterSpacing: 0 }}>
                     <input type="checkbox" style={{ width: 'auto', marginBottom: 0, accentColor: 'var(--primary)' }}
                       checked={form.priorityAlertOptIn} onChange={e => set('priorityAlertOptIn', e.target.checked)} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,7 +13,6 @@ export default function ChatbotPanel({ onEligibilityResult }) {
 
   useEffect(() => {
     api.get('/chatbot/questions').then(r => setQuestions(r.data.questions)).catch(() => {});
-    // Load last result from history
     api.get('/chatbot/history').then(r => {
       if (r.data?.length > 0) setLastResult(r.data[0].eligibilityResult);
     }).catch(() => {});
@@ -38,65 +37,73 @@ export default function ChatbotPanel({ onEligibilityResult }) {
   };
 
   const restart = () => { setStep(0); setAnswers([]); setResult(null); };
-
   const current = questions[step];
   const progress = questions.length ? (step / questions.length) * 100 : 0;
 
   return (
-    <div style={styles.panel}>
-      <div style={styles.panelHeader}>
-        <span style={styles.panelTitle}>🤖 Eligibility Check</span>
-        {lastResult && !result && (
-          <span style={{ ...styles.lastBadge, background: lastResult.eligible ? '#d4edda' : '#ffe0e0', color: lastResult.eligible ? '#2d6a4f' : '#e63946' }}>
-            Last: {lastResult.eligible ? '✅ Eligible' : '❌ Not eligible'} ({lastResult.score}/100)
-          </span>
-        )}
-      </div>
-
-      {loading && (
-        <div style={styles.center}>
-          <div style={styles.spinner} />
-          <p style={{ color: 'var(--gray)', fontSize: 13, marginTop: 8 }}>Analyzing...</p>
-        </div>
-      )}
-
-      {!loading && result && (
-        <div style={styles.result}>
-          <div style={{ fontSize: 36, textAlign: 'center' }}>{result.eligible ? '✅' : '❌'}</div>
-          <p style={{ ...styles.resultTitle, color: result.eligible ? '#2d6a4f' : '#e63946' }}>
-            {result.eligible ? 'You are eligible to donate!' : 'Not eligible right now'}
-          </p>
-          <div style={styles.scoreRow}>
-            <span style={{ fontSize: 28, fontWeight: 700, color: result.score >= 60 ? '#2d6a4f' : '#e63946' }}>{result.score}</span>
-            <span style={{ color: 'var(--gray)', fontSize: 13 }}>/100</span>
-          </div>
-          {result.reasons?.length > 0 && (
-            <div style={styles.reasons}>
-              {result.reasons.map((r, i) => <div key={i} style={styles.reason}>⚠️ {r}</div>)}
+    <div style={S.panel}>
+      {/* Header */}
+      <div style={S.header}>
+        <span style={S.headerIcon}>🩺</span>
+        <div>
+          <div style={S.headerTitle}>Eligibility Check</div>
+          {lastResult && !result && (
+            <div style={{ ...S.lastBadge, color: lastResult.eligible ? '#30d158' : '#ff453a' }}>
+              Last: {lastResult.eligible ? '✅' : '❌'} {lastResult.score}/100
             </div>
           )}
-          <button className="btn btn-outline" style={{ width: '100%', marginTop: 12 }} onClick={restart}>
-            Check Again
-          </button>
+        </div>
+      </div>
+
+      {/* Loading */}
+      {loading && (
+        <div style={S.center}>
+          <div className="spinner spinner-sm" style={{ margin: '0 auto 10px' }} />
+          <p style={S.muted}>Analyzing your eligibility...</p>
         </div>
       )}
 
+      {/* Result */}
+      {!loading && result && (
+        <div style={S.resultWrap}>
+          <div style={S.resultEmoji}>{result.eligible ? '✅' : '❌'}</div>
+          <div style={{ ...S.resultTitle, color: result.eligible ? '#30d158' : '#ff453a' }}>
+            {result.eligible ? 'You are eligible!' : 'Not eligible right now'}
+          </div>
+          <div style={S.scoreRow}>
+            <span style={{ ...S.scoreNum, color: result.score >= 60 ? '#30d158' : '#ff453a' }}>{result.score}</span>
+            <span style={S.scoreDenom}>/100</span>
+          </div>
+          {result.reasons?.length > 0 && (
+            <div style={S.reasons}>
+              {result.reasons.map((r, i) => (
+                <div key={i} style={S.reason}>⚠️ {r}</div>
+              ))}
+            </div>
+          )}
+          <button style={S.restartBtn} onClick={restart}>Check Again</button>
+        </div>
+      )}
+
+      {/* Questions */}
       {!loading && !result && current && (
         <>
-          <div style={styles.progressBg}>
-            <div style={{ ...styles.progressFill, width: `${progress}%` }} />
+          <div style={S.progressBg}>
+            <div style={{ ...S.progressFill, width: progress + '%' }} />
           </div>
-          <p style={styles.stepLabel}>Question {step + 1} of {questions.length}</p>
-          <p style={styles.question}>{current.question}</p>
-          <div style={styles.options}>
+          <div style={S.stepLabel}>Question {step + 1} of {questions.length}</div>
+          <div style={S.question}>{current.question}</div>
+          <div style={S.options}>
             {current.options.map(opt => (
-              <button key={opt} className="btn btn-outline" style={styles.optBtn} onClick={() => handleAnswer(opt)}>
+              <button key={opt} style={S.optBtn} onClick={() => handleAnswer(opt)}
+                onMouseEnter={e => { e.target.style.background = 'rgba(255,45,85,0.15)'; e.target.style.borderColor = 'rgba(255,45,85,0.5)'; e.target.style.color = '#fff'; }}
+                onMouseLeave={e => { e.target.style.background = 'rgba(255,255,255,0.04)'; e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.color = 'rgba(255,255,255,0.7)'; }}>
                 {opt}
               </button>
             ))}
           </div>
           {step > 0 && (
-            <button style={styles.backBtn} onClick={() => { setStep(step - 1); setAnswers(answers.slice(0, -1)); }}>
+            <button style={S.backBtn} onClick={() => { setStep(step - 1); setAnswers(answers.slice(0, -1)); }}>
               ← Back
             </button>
           )}
@@ -104,29 +111,34 @@ export default function ChatbotPanel({ onEligibilityResult }) {
       )}
 
       {!loading && !result && !current && questions.length === 0 && (
-        <p style={{ color: 'var(--gray)', textAlign: 'center', padding: 20, fontSize: 13 }}>Loading questions...</p>
+        <div style={S.center}><p style={S.muted}>Loading questions...</p></div>
       )}
     </div>
   );
 }
 
-const styles = {
-  panel: { background: 'white', borderRadius: 10, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', height: '100%' },
-  panelHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 },
-  panelTitle: { fontWeight: 700, fontSize: 15, color: 'var(--dark)' },
-  lastBadge: { fontSize: 11, padding: '3px 10px', borderRadius: 20, fontWeight: 600 },
-  progressBg: { height: 5, background: '#eee', borderRadius: 3, marginBottom: 12, overflow: 'hidden' },
-  progressFill: { height: '100%', background: 'var(--primary)', borderRadius: 3, transition: 'width 0.3s' },
-  stepLabel: { fontSize: 12, color: 'var(--gray)', marginBottom: 6 },
-  question: { fontSize: 15, fontWeight: 600, marginBottom: 14, lineHeight: 1.4 },
+const S = {
+  panel: { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: 20 },
+  header: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18, paddingBottom: 14, borderBottom: '1px solid rgba(255,255,255,0.06)' },
+  headerIcon: { fontSize: 24, width: 40, height: 40, background: 'rgba(191,90,242,0.15)', border: '1px solid rgba(191,90,242,0.2)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  headerTitle: { fontWeight: 700, fontSize: 14, color: 'white' },
+  lastBadge: { fontSize: 11, marginTop: 2 },
+  progressBg: { height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, marginBottom: 14, overflow: 'hidden' },
+  progressFill: { height: '100%', background: 'linear-gradient(90deg, #ff2d55, #bf5af2)', borderRadius: 2, transition: 'width 0.3s' },
+  stepLabel: { fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 10 },
+  question: { fontSize: 15, fontWeight: 600, color: 'white', marginBottom: 16, lineHeight: 1.5 },
   options: { display: 'flex', flexDirection: 'column', gap: 8 },
-  optBtn: { textAlign: 'left', padding: '10px 14px', fontSize: 14, borderRadius: 8 },
-  backBtn: { background: 'none', border: 'none', color: 'var(--gray)', cursor: 'pointer', marginTop: 10, fontSize: 13 },
+  optBtn: { padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: 'rgba(255,255,255,0.7)', textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif' },
+  backBtn: { background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', marginTop: 12, fontSize: 12, padding: 0 },
   center: { textAlign: 'center', padding: '20px 0' },
-  spinner: { width: 32, height: 32, border: '3px solid #eee', borderTop: '3px solid var(--primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' },
-  result: { textAlign: 'center' },
-  resultTitle: { fontWeight: 700, fontSize: 15, margin: '8px 0 4px' },
-  scoreRow: { display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 4, marginBottom: 10 },
-  reasons: { background: '#fff3cd', padding: 12, borderRadius: 8, textAlign: 'left', marginBottom: 8 },
-  reason: { fontSize: 12, color: '#856404', marginBottom: 4 }
+  muted: { color: 'rgba(255,255,255,0.4)', fontSize: 13 },
+  resultWrap: { textAlign: 'center' },
+  resultEmoji: { fontSize: 40, marginBottom: 10 },
+  resultTitle: { fontWeight: 700, fontSize: 15, marginBottom: 8 },
+  scoreRow: { display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 3, marginBottom: 14 },
+  scoreNum: { fontSize: 36, fontWeight: 900 },
+  scoreDenom: { fontSize: 14, color: 'rgba(255,255,255,0.4)' },
+  reasons: { background: 'rgba(255,159,10,0.08)', border: '1px solid rgba(255,159,10,0.2)', borderRadius: 10, padding: '12px 14px', textAlign: 'left', marginBottom: 14 },
+  reason: { fontSize: 12, color: '#ff9f0a', marginBottom: 4, lineHeight: 1.4 },
+  restartBtn: { width: '100%', padding: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, color: 'rgba(255,255,255,0.7)', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'Inter, sans-serif' }
 };
