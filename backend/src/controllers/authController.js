@@ -23,25 +23,30 @@ exports.sendOTP = async (req, res) => {
     const otp = generateOTP();
     await OTP.create({ email: email.toLowerCase(), otp });
 
-    // Try to send email — if Gmail not configured, log OTP to console for testing
-    const gmailConfigured = process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD &&
-      process.env.GMAIL_USER !== 'your_gmail@gmail.com';
+    const gmailReady = process.env.GMAIL_USER &&
+      process.env.GMAIL_APP_PASSWORD &&
+      !process.env.GMAIL_USER.includes('your_gmail');
 
-    if (gmailConfigured) {
-      await sendOTPEmail(email, otp);
-    } else {
-      console.log(`[DEV] OTP for ${email}: ${otp}`);
+    if (gmailReady) {
+      try {
+        await sendOTPEmail(email, otp);
+        return res.json({ message: 'OTP sent to your email' });
+      } catch (mailErr) {
+        console.error('Mail send failed:', mailErr.message);
+        // Fall through — return OTP in response for now
+      }
     }
 
-    res.json({
-      message: gmailConfigured
-        ? 'OTP sent to your email'
-        : 'OTP generated (check server logs — email not configured)',
-      ...(process.env.NODE_ENV !== 'production' && { otp }) // expose in dev only
+    // Gmail not configured or failed — return OTP directly so user can still register
+    console.log(`[OTP] ${email} => ${otp}`);
+    return res.json({
+      message: 'OTP generated (email not configured — use the code below)',
+      otp // visible in response when email not set up
     });
+
   } catch (err) {
     console.error('Send OTP error:', err.message);
-    res.status(500).json({ message: 'Failed to send OTP: ' + err.message });
+    res.status(500).json({ message: 'Server error: ' + err.message });
   }
 };
 

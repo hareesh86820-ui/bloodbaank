@@ -43,10 +43,15 @@ export default function Register() {
     if (!form.email) { setOtpError('Enter your email first'); return; }
     setOtpLoading(true); setOtpError('');
     try {
-      await api.post('/auth/send-otp', { email: form.email });
+      const res = await api.post('/auth/send-otp', { email: form.email });
       setOtpSent(true);
       setStep(2);
       startResendTimer();
+      // If server returns OTP directly (email not configured), auto-fill it
+      if (res.data.otp) {
+        setOtp(res.data.otp);
+        setOtpError('Email not configured — OTP auto-filled: ' + res.data.otp);
+      }
     } catch (err) {
       setOtpError(err.response?.data?.message || 'Failed to send OTP');
     }
