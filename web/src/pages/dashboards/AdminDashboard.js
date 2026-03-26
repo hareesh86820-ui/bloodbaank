@@ -254,6 +254,67 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {/* Fraud Review */}
+      {tab === 'fraud' && (
+        <div className="animate-slideUp">
+          <div style={styles.tableCard}>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 20 }}>🚩</span>
+              <div>
+                <div style={{ fontWeight: 700, color: 'white' }}>Flagged Requests</div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>Suspicious requests detected by fraud system — review and take action</div>
+              </div>
+              <span style={{ marginLeft: 'auto', background: 'rgba(255,45,85,0.15)', color: '#ff2d55', border: '1px solid rgba(255,45,85,0.3)', padding: '3px 12px', borderRadius: 50, fontSize: 12, fontWeight: 700 }}>
+                {flagged.length} flagged
+              </span>
+            </div>
+            {flagged.length === 0 && (
+              <div style={{ textAlign: 'center', padding: '40px', color: 'rgba(255,255,255,0.4)' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
+                <p>No flagged requests — system is clean</p>
+              </div>
+            )}
+            {flagged.map(r => (
+              <div key={r._id} style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6, flexWrap: 'wrap' }}>
+                    <span style={{ background: 'rgba(255,45,85,0.15)', color: '#ff2d55', padding: '2px 10px', borderRadius: 6, fontWeight: 800, fontSize: 13 }}>{r.bloodType}</span>
+                    <span style={{ color: 'white', fontWeight: 600 }}>{r.units} units</span>
+                    <span className={'badge badge-' + (r.urgency === 'critical' ? 'critical' : r.urgency === 'urgent' ? 'urgent' : 'normal')}>{r.urgency}</span>
+                    <span style={{ background: 'rgba(255,214,10,0.15)', color: '#ffd60a', border: '1px solid rgba(255,214,10,0.3)', padding: '2px 10px', borderRadius: 50, fontSize: 11, fontWeight: 700 }}>
+                      ⚠️ Score: {r.fraudScore}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>
+                    Recipient: {r.recipient?.name || '—'} · {r.recipient?.phone || '—'}
+                  </div>
+                  {r.fraudReasons?.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                      {r.fraudReasons.map((reason, i) => (
+                        <div key={i} style={{ fontSize: 12, color: '#ff9f0a' }}>⚠️ {reason}</div>
+                      ))}
+                    </div>
+                  )}
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>{new Date(r.createdAt).toLocaleString()}</div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                  <button className="btn btn-success btn-sm" onClick={async () => {
+                    await api.put('/admin/flagged/' + r._id + '/dismiss');
+                    setFlagged(prev => prev.filter(f => f._id !== r._id));
+                    toast.success('Flag dismissed');
+                  }}>✓ Dismiss</button>
+                  <button className="btn btn-danger btn-sm" onClick={async () => {
+                    await api.put('/admin/flagged/' + r._id + '/cancel');
+                    setFlagged(prev => prev.filter(f => f._id !== r._id));
+                    toast.warning('Request cancelled');
+                  }}>✕ Cancel</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Audit */}
       {tab === 'audit' && (        <div className="animate-slideUp">
           <div style={styles.tableCard}>
