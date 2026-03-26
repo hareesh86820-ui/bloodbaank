@@ -142,10 +142,10 @@ export default function Register() {
                 ))}
               </div>
 
-              {/* Age — only shows after selecting donor or recipient */}
-              {showAge && (
+              {/* Age — only for donor and recipient, hidden for hospital/ngo */}
+              {form.role !== '' && ['donor','recipient'].includes(form.role) && (
                 <>
-                  <label style={{ marginTop: 4 }}>Age</label>
+                  <label>Age</label>
                   <input type="number" placeholder="25" min="1" max="120"
                     value={form.age} onChange={e => set('age', e.target.value)} required />
                 </>
