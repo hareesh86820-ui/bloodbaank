@@ -125,6 +125,9 @@ export default function Register() {
               <label style={{ marginTop: 12 }}>Phone Number</label>
               <input placeholder="+1 234 567 8900" value={form.phone} onChange={e => set('phone', e.target.value)} required />
 
+              <label>Age</label>
+              <input type="number" placeholder="25" min="1" max="120" value={form.age} onChange={e => set('age', e.target.value)} required />
+
               <label>Password</label>
               <input type="password" placeholder="Min. 8 characters" value={form.password} onChange={e => set('password', e.target.value)} required />
 
@@ -141,15 +144,6 @@ export default function Register() {
                   </div>
                 ))}
               </div>
-
-              {/* Age — only for donor and recipient, hidden for hospital/ngo */}
-              {form.role !== '' && ['donor','recipient'].includes(form.role) && (
-                <>
-                  <label>Age</label>
-                  <input type="number" placeholder="25" min="1" max="120"
-                    value={form.age} onChange={e => set('age', e.target.value)} required />
-                </>
-              )}
 
               <button style={S.primaryBtn} onClick={handleSendOTP}
                 disabled={!form.role || !form.name || !form.email || otpLoading}>
