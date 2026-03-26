@@ -3,12 +3,13 @@ import { toast } from 'react-toastify';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 import api from '../../utils/api';
 
-const TABS = ['overview','users','requests','audit'];
+const TABS = ['overview','users','requests','fraud','audit'];
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [flagged, setFlagged] = useState([]);
   const [audit, setAudit] = useState([]);
   const [tab, setTab] = useState('overview');
   const [search, setSearch] = useState('');
@@ -20,6 +21,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (tab === 'users') api.get('/admin/users').then(r => setUsers(r.data)).catch(() => {});
     if (tab === 'requests') api.get('/admin/requests').then(r => setRequests(r.data)).catch(() => {});
+    if (tab === 'fraud') api.get('/admin/flagged').then(r => setFlagged(r.data)).catch(() => {});
     if (tab === 'audit') api.get('/admin/chatbot-audit').then(r => setAudit(r.data)).catch(() => {});
   }, [tab]);
 
@@ -253,8 +255,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Audit */}
-      {tab === 'audit' && (
-        <div className="animate-slideUp">
+      {tab === 'audit' && (        <div className="animate-slideUp">
           <div style={styles.tableCard}>
             <table className="table">
               <thead>

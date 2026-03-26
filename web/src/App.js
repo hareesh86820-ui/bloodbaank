@@ -17,6 +17,7 @@ import Chatbot from './pages/Chatbot';
 import MapView from './pages/MapView';
 import Navbar from './components/Navbar';
 import BloodBot from './components/BloodBot';
+import Profile from './pages/Profile';
 
 const PrivateRoute = ({ children, roles }) => {
   const { token, user } = useSelector(s => s.auth);
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="/request/new" element={<PrivateRoute roles={['recipient']}><CreateRequest /></PrivateRoute>} />
         <Route path="/chatbot" element={<PrivateRoute roles={['donor']}><Chatbot /></PrivateRoute>} />
         <Route path="/map" element={<PrivateRoute><MapView /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
       </Routes>
       <ToastContainer position="top-right" autoClose={4000} />
       <BloodBot />

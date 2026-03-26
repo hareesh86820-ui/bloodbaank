@@ -46,6 +46,7 @@ app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/matching', require('./routes/matching'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/ngo', require('./routes/ngo'));
+app.use('/api/profile', require('./routes/profile'));
 
 app.get('/health', (req, res) => res.json({ status: 'OK', timestamp: new Date() }));
 

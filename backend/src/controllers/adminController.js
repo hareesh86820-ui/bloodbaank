@@ -77,3 +77,32 @@ exports.getChatbotAudit = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.getFlaggedRequests = async (req, res) => {
+  try {
+    const requests = await BloodRequest.find({ isFlagged: true })
+      .populate('recipient', 'name phone email')
+      .sort('-createdAt');
+    res.json(requests);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.dismissFlag = async (req, res) => {
+  try {
+    await BloodRequest.findByIdAndUpdate(req.params.id, { isFlagged: false, fraudScore: 0, fraudReasons: [] });
+    res.json({ message: 'Flag dismissed' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.cancelFlaggedRequest = async (req, res) => {
+  try {
+    await BloodRequest.findByIdAndUpdate(req.params.id, { status: 'cancelled', isFlagged: false });
+    res.json({ message: 'Request cancelled' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

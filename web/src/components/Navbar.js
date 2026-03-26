@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 
 const NAV_LINKS = {
-  donor:     [{ to: '/', label: '🏠 Home' }, { to: '/map', label: '🗺️ Map' }, { to: '/chatbot', label: '🤖 Eligibility' }],
-  recipient: [{ to: '/', label: '🏠 Home' }, { to: '/request/new', label: '➕ Request' }, { to: '/map', label: '🗺️ Map' }],
-  hospital:  [{ to: '/', label: '🏠 Home' }, { to: '/map', label: '🗺️ Map' }],
+  donor:     [{ to: '/', label: '🏠 Home' }, { to: '/map', label: '🗺️ Map' }, { to: '/chatbot', label: '🤖 Eligibility' }, { to: '/profile', label: '👤 Profile' }],
+  recipient: [{ to: '/', label: '🏠 Home' }, { to: '/request/new', label: '➕ Request' }, { to: '/map', label: '🗺️ Map' }, { to: '/profile', label: '👤 Profile' }],
+  hospital:  [{ to: '/', label: '🏠 Home' }, { to: '/map', label: '🗺️ Map' }, { to: '/profile', label: '👤 Profile' }],
   admin:     [{ to: '/', label: '🏠 Home' }, { to: '/map', label: '🗺️ Map' }],
   ngo:       [{ to: '/', label: '🏠 Home' }, { to: '/map', label: '🗺️ Map' }]
 };
