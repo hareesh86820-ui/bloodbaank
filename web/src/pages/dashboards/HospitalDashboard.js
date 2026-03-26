@@ -210,7 +210,7 @@ const styles = {
   tab: { padding: '8px 20px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 10, color: 'rgba(255,255,255,0.5)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8 },
   tabActive: { background: 'rgba(48,209,88,0.1)', border: '1px solid rgba(48,209,88,0.3)', color: 'white' },
   tabBadge: { background: '#ff2d55', color: 'white', borderRadius: 50, padding: '1px 7px', fontSize: 11, fontWeight: 700 },
-  inventoryGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 },
+  inventoryGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 14 },
   btCard: { background: 'rgba(255,255,255,0.04)', border: '1px solid', borderRadius: 16, padding: '20px 16px', textAlign: 'center', position: 'relative', transition: 'all 0.2s' },
   btCircle: { width: 52, height: 52, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 16, margin: '0 auto 12px' },
   btUnits: { fontSize: 32, fontWeight: 900, color: 'white', marginBottom: 2 },

@@ -300,3 +300,67 @@ label {
 @media (max-width: 480px) {
   .page { padding: 16px 12px; }
 }
+
+/* ── Mobile Responsive ─────────────────────────────────────────────────────── */
+
+/* Navbar mobile */
+@media (max-width: 768px) {
+  nav .hide-mobile { display: none !important; }
+  nav .hamburger { display: flex !important; }
+}
+
+/* Login page */
+@media (max-width: 768px) {
+  .login-container { flex-direction: column !important; padding: 20px 16px !important; }
+  .login-left { display: none !important; }
+  .login-form-panel { width: 100% !important; }
+  .login-card { padding: 28px 20px !important; }
+}
+
+/* Register page */
+@media (max-width: 480px) {
+  .register-card { padding: 24px 16px !important; }
+  .role-grid { grid-template-columns: 1fr !important; }
+  .bt-grid { grid-template-columns: repeat(4, 1fr) !important; }
+}
+
+/* Dashboard pages */
+@media (max-width: 900px) {
+  .donor-main-grid { flex-direction: column !important; }
+  .stats-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .stats-grid-6 { grid-template-columns: repeat(3, 1fr) !important; }
+  .chart-grid-2 { grid-template-columns: 1fr !important; }
+  .hospital-inventory-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 600px) {
+  .stats-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .stats-grid-6 { grid-template-columns: repeat(2, 1fr) !important; }
+  .hospital-inventory-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .page { padding: 16px 12px !important; }
+  .tabs-row { flex-wrap: wrap !important; }
+  .req-card-actions { flex-direction: column !important; gap: 6px !important; }
+  .hero-section { flex-direction: column !important; align-items: flex-start !important; }
+  .hero-right { width: 100% !important; justify-content: flex-start !important; }
+  .table-wrap { overflow-x: auto !important; }
+  .ngo-tabs { flex-wrap: wrap !important; }
+}
+
+/* Map page */
+@media (max-width: 600px) {
+  .map-container { height: 55vh !important; }
+}
+
+/* BloodBot floating button */
+@media (max-width: 480px) {
+  .bloodbot-fab { bottom: 16px !important; right: 16px !important; width: 48px !important; height: 48px !important; font-size: 20px !important; }
+  .bloodbot-window { right: 8px !important; left: 8px !important; width: auto !important; bottom: 76px !important; }
+}
+
+/* General utility */
+@media (max-width: 768px) {
+  .hide-on-mobile { display: none !important; }
+  .full-width-mobile { width: 100% !important; }
+  h1 { font-size: 22px !important; }
+  h2 { font-size: 18px !important; }
+}

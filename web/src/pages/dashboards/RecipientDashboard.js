@@ -139,7 +139,7 @@ const styles = {
   greeting: { fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 4 },
   name: { fontSize: 28, fontWeight: 800, color: 'white' },
   newBtn: { display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: 'linear-gradient(135deg, #ff2d55, #ff6b6b)', borderRadius: 12, color: 'white', fontWeight: 700, fontSize: 14, boxShadow: '0 4px 20px rgba(255,45,85,0.4)', transition: 'all 0.2s' },
-  statsRow: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 },
+  statsRow: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 14, marginBottom: 28 },
   statCard: { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '20px', textAlign: 'center', transition: 'transform 0.3s' },
   statIcon: { fontSize: 28, marginBottom: 8 },
   statVal: { fontSize: 28, fontWeight: 800, marginBottom: 4 },

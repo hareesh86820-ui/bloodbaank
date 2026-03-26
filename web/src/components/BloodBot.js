@@ -61,14 +61,14 @@ export default function BloodBot() {
   return (
     <>
       {/* Floating button */}
-      <button style={styles.fab} onClick={() => setOpen(o => !o)} title="BloodBot — Ask about blood donation">
+      <button style={styles.fab} className="bloodbot-fab" onClick={() => setOpen(o => !o)} title="HemoraBot — Ask about blood donation">
         {open ? '✕' : '🩸'}
         {!open && unread > 0 && <span style={styles.badge}>{unread}</span>}
       </button>
 
       {/* Chat window */}
       {open && (
-        <div style={styles.window}>
+        <div style={styles.window} className="bloodbot-window">
           {/* Header */}
           <div style={styles.header}>
             <div style={styles.headerLeft}>
