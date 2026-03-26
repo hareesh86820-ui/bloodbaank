@@ -15,21 +15,33 @@ exports.sendOTP = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: 'Email is required' });
 
-    // Check if email already registered
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) return res.status(400).json({ message: 'Email already registered' });
 
-    // Delete any existing OTP for this email
     await OTP.deleteMany({ email: email.toLowerCase() });
 
     const otp = generateOTP();
     await OTP.create({ email: email.toLowerCase(), otp });
-    await sendOTPEmail(email, otp);
 
-    res.json({ message: 'OTP sent to your email' });
+    // Try to send email — if Gmail not configured, log OTP to console for testing
+    const gmailConfigured = process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD &&
+      process.env.GMAIL_USER !== 'your_gmail@gmail.com';
+
+    if (gmailConfigured) {
+      await sendOTPEmail(email, otp);
+    } else {
+      console.log(`[DEV] OTP for ${email}: ${otp}`);
+    }
+
+    res.json({
+      message: gmailConfigured
+        ? 'OTP sent to your email'
+        : 'OTP generated (check server logs — email not configured)',
+      ...(process.env.NODE_ENV !== 'production' && { otp }) // expose in dev only
+    });
   } catch (err) {
     console.error('Send OTP error:', err.message);
-    res.status(500).json({ message: 'Failed to send OTP. Check email configuration.' });
+    res.status(500).json({ message: 'Failed to send OTP: ' + err.message });
   }
 };
 
