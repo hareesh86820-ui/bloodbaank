@@ -95,9 +95,7 @@ export default function ChatbotPanel({ onEligibilityResult }) {
           <div style={S.question}>{current.question}</div>
           <div style={S.options}>
             {current.options.map(opt => (
-              <button key={opt} style={S.optBtn} onClick={() => handleAnswer(opt)}
-                onMouseEnter={e => { e.target.style.background = 'rgba(255,45,85,0.15)'; e.target.style.borderColor = 'rgba(255,45,85,0.5)'; e.target.style.color = '#fff'; }}
-                onMouseLeave={e => { e.target.style.background = 'rgba(255,255,255,0.04)'; e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.color = 'rgba(255,255,255,0.7)'; }}>
+              <button key={opt} style={S.optBtn} className="chatbot-opt-btn" onClick={() => handleAnswer(opt)}>
                 {opt}
               </button>
             ))}
@@ -128,7 +126,21 @@ const S = {
   stepLabel: { fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 10 },
   question: { fontSize: 15, fontWeight: 600, color: 'white', marginBottom: 16, lineHeight: 1.5 },
   options: { display: 'flex', flexDirection: 'column', gap: 8 },
-  optBtn: { padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: 'rgba(255,255,255,0.7)', textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif' },
+  optBtn: { 
+    padding: '11px 14px', 
+    background: 'rgba(255,255,255,0.06)', 
+    border: '1px solid rgba(255,255,255,0.15)', 
+    borderRadius: 10, 
+    cursor: 'pointer', 
+    fontSize: 13, 
+    color: '#ffffff', 
+    textAlign: 'left', 
+    transition: 'all 0.15s', 
+    fontFamily: 'Inter, sans-serif',
+    WebkitTextFillColor: '#ffffff',
+    display: 'block',
+    width: '100%'
+  },
   backBtn: { background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', marginTop: 12, fontSize: 12, padding: 0 },
   center: { textAlign: 'center', padding: '20px 0' },
   muted: { color: 'rgba(255,255,255,0.4)', fontSize: 13 },
