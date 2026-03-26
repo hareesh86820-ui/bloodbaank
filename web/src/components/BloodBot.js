@@ -141,12 +141,12 @@ export default function BloodBot() {
 }
 
 const styles = {
-  fab: { position: 'fixed', bottom: 28, right: 28, width: 56, height: 56, borderRadius: '50%', background: 'var(--primary)', color: 'white', border: 'none', fontSize: 24, cursor: 'pointer', boxShadow: '0 4px 16px rgba(230,57,70,0.4)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s' },
-  badge: { position: 'absolute', top: -4, right: -4, background: '#f4a261', color: 'white', borderRadius: '50%', width: 18, height: 18, fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 },
-  window: { position: 'fixed', bottom: 96, right: 28, width: 360, maxHeight: 520, background: 'white', borderRadius: 16, boxShadow: '0 8px 32px rgba(0,0,0,0.18)', zIndex: 9998, display: 'flex', flexDirection: 'column', overflow: 'hidden' },
-  header: { background: 'var(--primary)', padding: '14px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  fab: { position: 'fixed', bottom: 28, right: 28, width: 56, height: 56, borderRadius: '50%', background: '#ff2d55', color: 'white', border: 'none', fontSize: 24, cursor: 'pointer', boxShadow: '0 4px 20px rgba(255,45,85,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s' },
+  badge: { position: 'absolute', top: -4, right: -4, background: '#ff9f0a', color: 'white', borderRadius: '50%', width: 18, height: 18, fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 },
+  window: { position: 'fixed', bottom: 96, right: 28, width: 360, maxHeight: 520, background: 'rgba(15,15,22,0.98)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, boxShadow: '0 16px 48px rgba(0,0,0,0.6)', zIndex: 9998, display: 'flex', flexDirection: 'column', overflow: 'hidden', backdropFilter: 'blur(20px)' },
+  header: { background: 'linear-gradient(135deg, #ff2d55, #ff6b6b)', padding: '14px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   headerLeft: { display: 'flex', alignItems: 'center', gap: 10 },
-  avatar: { fontSize: 28, background: 'rgba(255,255,255,0.2)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  avatar: { fontSize: 22, background: 'rgba(255,255,255,0.2)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   botName: { color: 'white', fontWeight: 700, fontSize: 15 },
   botStatus: { color: 'rgba(255,255,255,0.8)', fontSize: 11 },
   closeBtn: { background: 'none', border: 'none', color: 'white', fontSize: 16, cursor: 'pointer', padding: 4 },
@@ -154,12 +154,12 @@ const styles = {
   msgRow: { display: 'flex', alignItems: 'flex-end', gap: 6 },
   botAvatar: { fontSize: 18, flexShrink: 0 },
   bubble: { maxWidth: '80%', padding: '9px 13px', borderRadius: 14, fontSize: 13, lineHeight: 1.5 },
-  botBubble: { background: '#f1faee', color: '#1d3557', borderRadius: '14px 14px 14px 2px' },
-  userBubble: { background: 'var(--primary)', color: 'white', borderRadius: '14px 14px 2px 14px' },
+  botBubble: { background: 'rgba(255,255,255,0.08)', color: '#ffffff', borderRadius: '14px 14px 14px 2px', border: '1px solid rgba(255,255,255,0.1)' },
+  userBubble: { background: 'linear-gradient(135deg, #ff2d55, #ff6b6b)', color: 'white', borderRadius: '14px 14px 2px 14px' },
   typing: { display: 'flex', alignItems: 'center', height: 20 },
-  suggestions: { padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, borderTop: '1px solid #f0f0f0' },
-  suggestion: { background: '#f1faee', border: '1px solid #c8e6c9', borderRadius: 20, padding: '4px 10px', fontSize: 11, cursor: 'pointer', color: 'var(--dark)', whiteSpace: 'nowrap' },
-  inputRow: { display: 'flex', padding: '10px 12px', borderTop: '1px solid #f0f0f0', gap: 8 },
-  input: { flex: 1, border: '1px solid var(--border)', borderRadius: 20, padding: '8px 14px', fontSize: 13, outline: 'none' },
-  sendBtn: { background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '50%', width: 36, height: 36, cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }
+  suggestions: { padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, borderTop: '1px solid rgba(255,255,255,0.06)' },
+  suggestion: { background: 'rgba(255,45,85,0.12)', border: '1px solid rgba(255,45,85,0.25)', borderRadius: 20, padding: '5px 12px', fontSize: 11, cursor: 'pointer', color: '#ffffff', whiteSpace: 'nowrap', fontFamily: 'Inter, sans-serif', WebkitTextFillColor: '#ffffff' },
+  inputRow: { display: 'flex', padding: '10px 12px', borderTop: '1px solid rgba(255,255,255,0.06)', gap: 8 },
+  input: { flex: 1, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 20, padding: '8px 14px', fontSize: 13, outline: 'none', color: 'white', fontFamily: 'Inter, sans-serif' },
+  sendBtn: { background: '#ff2d55', color: 'white', border: 'none', borderRadius: '50%', width: 36, height: 36, cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }
 };
