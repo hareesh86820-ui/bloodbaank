@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -18,7 +18,6 @@ import MapView from './pages/MapView';
 import Navbar from './components/Navbar';
 import BloodBot from './components/BloodBot';
 import Profile from './pages/Profile';
-import SplashScreen from './components/SplashScreen';
 
 const PrivateRoute = ({ children, roles }) => {
   const { token, user } = useSelector(s => s.auth);
@@ -43,13 +42,10 @@ const DashboardRouter = () => {
 export default function App() {
   const dispatch = useDispatch();
   const { token } = useSelector(s => s.auth);
-  const [splash, setSplash] = useState(true);
 
   useEffect(() => {
     if (token) dispatch(getMe());
   }, [token, dispatch]);
-
-  if (splash) return <SplashScreen onDone={() => setSplash(false)} />;
 
   return (
     <BrowserRouter>
