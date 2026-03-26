@@ -52,7 +52,7 @@ export default function Login() {
             <div style={styles.logo3d}>🩸</div>
             <div style={styles.logoRing} />
           </div>
-          <h1 style={styles.heroTitle}>BloodConnect</h1>
+          <h1 style={styles.heroTitle}>Hemora</h1>
           <p style={styles.heroSub}>AI-Powered Emergency Blood Donor Matching</p>
           <div style={styles.stats}>
             {[['10K+','Donors'],['500+','Hospitals'],['99%','Uptime']].map(([v,l]) => (
@@ -129,7 +129,7 @@ export default function Login() {
 
             <div style={styles.divider}>
               <span style={styles.dividerLine} />
-              <span style={styles.dividerText}>New to BloodConnect?</span>
+              <span style={styles.dividerText}>New to Hemora?</span>
               <span style={styles.dividerLine} />
             </div>
 

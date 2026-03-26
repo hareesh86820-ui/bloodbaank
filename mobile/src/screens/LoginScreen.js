@@ -20,8 +20,8 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>🩸</Text>
-      <Text style={styles.title}>BloodConnect</Text>
-      <Text style={styles.subtitle}>Emergency Blood Donor Matching</Text>
+      <Text style={styles.title}>Hemora</Text>
+      <Text style={styles.subtitle}>AI-Powered Emergency Blood Donor Matching</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput style={styles.input} placeholder="Email" value={email}
         onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />

@@ -11,14 +11,14 @@ const transporter = nodemailer.createTransport({
 exports.sendOTPEmail = async (to, otp) => {
   try {
     await transporter.sendMail({
-      from: `"BloodConnect 🩸" <${process.env.GMAIL_USER}>`,
+      from: `"Hemora 🩸" <${process.env.GMAIL_USER}>`,
       to,
-      subject: 'Your BloodConnect Verification Code',
+      subject: 'Your Hemora Verification Code',
       html: `
         <div style="font-family:Inter,sans-serif;max-width:480px;margin:0 auto;background:#0a0a0f;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:40px;">
           <div style="text-align:center;margin-bottom:32px;">
             <span style="font-size:48px;">🩸</span>
-            <h1 style="color:#fff;font-size:24px;margin:12px 0 4px;">BloodConnect</h1>
+            <h1 style="color:#fff;font-size:24px;margin:12px 0 4px;">Hemora</h1>
             <p style="color:rgba(255,255,255,0.4);font-size:14px;">Email Verification</p>
           </div>
           <p style="color:rgba(255,255,255,0.7);font-size:15px;margin-bottom:24px;">

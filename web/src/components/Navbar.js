@@ -39,7 +39,7 @@ export default function Navbar() {
         {/* Brand */}
         <Link to="/" style={styles.brand} onClick={() => setMenuOpen(false)}>
           <span style={styles.brandIcon}>🩸</span>
-          <span style={styles.brandText}>BloodConnect</span>
+          <span style={styles.brandText}>Hemora</span>
         </Link>
 
         {/* Desktop Links */}
@@ -97,8 +97,7 @@ const styles = {
   inner: { maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', height: 64, gap: 8, padding: '0 24px' },
   brand: { display: 'flex', alignItems: 'center', gap: 10, marginRight: 24, textDecoration: 'none', flexShrink: 0 },
   brandIcon: { fontSize: 24 },
-  brandText: { fontSize: 18, fontWeight: 800, color: 'white' },
-  links: { gap: 4, flex: 1, flexWrap: 'wrap' },
+  brandText: { fontSize: 18, fontWeight: 800, color: 'white' },  links: { gap: 4, flex: 1, flexWrap: 'wrap' },
   link: { padding: '6px 14px', borderRadius: 8, fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 },
   linkActive: { color: 'white', background: 'rgba(255,255,255,0.08)' },
   linkDot: { width: 4, height: 4, borderRadius: '50%', background: '#e63946' },

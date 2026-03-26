@@ -83,7 +83,7 @@ export default function Register() {
       <div style={styles.container}>
         <div style={styles.header}>
           <Link to="/login" style={styles.backBtn}>← Back to login</Link>
-          <div style={styles.logo}>🩸 <span style={styles.logoText}>BloodConnect</span></div>
+          <div style={styles.logo}>🩸 <span style={styles.logoText}>Hemora</span></div>
         </div>
 
         <div style={styles.card}>

@@ -13,7 +13,7 @@ const SUGGESTED = [
 
 const WELCOME = {
   from: 'bot',
-  text: "Hi! I'm BloodBot 🩸 Ask me anything about blood donation — eligibility, process, blood types, recovery, or benefits!"
+  text: "Hi! I'm HemoraBot 🩸 Ask me anything about blood donation — eligibility, process, blood types, recovery, or benefits!"
 };
 
 export default function BloodBot() {
@@ -74,7 +74,7 @@ export default function BloodBot() {
             <div style={styles.headerLeft}>
               <span style={styles.avatar}>🩸</span>
               <div>
-                <div style={styles.botName}>BloodBot</div>
+                <div style={styles.botName}>HemoraBot</div>
                 <div style={styles.botStatus}>● Online — Ask me anything</div>
               </div>
             </div>

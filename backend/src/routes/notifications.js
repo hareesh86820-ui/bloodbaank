@@ -22,7 +22,7 @@ router.get('/sms-status', protect, authorize('admin'), (req, res) => {
 router.post('/test-sms', protect, authorize('admin'), async (req, res) => {
   const { phone } = req.body;
   if (!phone) return res.status(400).json({ message: 'phone is required' });
-  sendSMS(phone, 'BloodConnect test message: SMS system is working correctly! 🩸');
+  sendSMS(phone, 'Hemora test message: SMS system is working correctly! 🩸');
   res.json({ message: `Test SMS queued for ${phone}. Check server logs for delivery status.` });
 });
 

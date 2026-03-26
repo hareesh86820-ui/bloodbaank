@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: bloodconnect-backend
+    name: hemora-backend
     env: node
     buildCommand: npm install
     startCommand: node src/server.js
