@@ -49,6 +49,7 @@ app.use('/api/ngo', require('./routes/ngo'));
 app.use('/api/profile', require('./routes/profile'));
 
 app.get('/health', (req, res) => res.json({ status: 'OK', timestamp: new Date() }));
+app.get('/ping', (req, res) => res.json({ pong: true })); // keep-alive endpoint
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

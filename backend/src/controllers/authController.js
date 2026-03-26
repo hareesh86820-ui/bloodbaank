@@ -139,12 +139,13 @@ exports.login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
-    const user = await User.findOne({ email: email.toLowerCase() });
+    // Use lean + select only needed fields for speed
+    const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
     if (!user.isActive) {
-      return res.status(403).json({ message: 'Account has been deactivated. Contact support.' });
+      return res.status(403).json({ message: 'Account deactivated. Contact support.' });
     }
     res.json({
       token: generateToken(user._id),
