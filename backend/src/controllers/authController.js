@@ -1,71 +1,7 @@
 const User = require('../models/User');
 const Donor = require('../models/Donor');
 const Hospital = require('../models/Hospital');
-const OTP = require('../models/OTP');
 const generateToken = require('../utils/generateToken');
-const { sendOTPEmail } = require('../utils/mailer');
-const crypto = require('crypto');
-
-// Generate 6-digit OTP
-const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
-
-// Step 1: Send OTP to email
-exports.sendOTP = async (req, res) => {
-  try {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ message: 'Email is required' });
-
-    const exists = await User.findOne({ email: email.toLowerCase() });
-    if (exists) return res.status(400).json({ message: 'Email already registered' });
-
-    await OTP.deleteMany({ email: email.toLowerCase() });
-
-    const otp = generateOTP();
-    await OTP.create({ email: email.toLowerCase(), otp });
-
-    const gmailReady = process.env.GMAIL_USER &&
-      process.env.GMAIL_APP_PASSWORD &&
-      !process.env.GMAIL_USER.includes('your_gmail');
-
-    if (gmailReady) {
-      try {
-        await sendOTPEmail(email, otp);
-        return res.json({ message: 'OTP sent to your email' });
-      } catch (mailErr) {
-        console.error('Mail send failed:', mailErr.message);
-        // Fall through — return OTP in response for now
-      }
-    }
-
-    // Gmail not configured or failed — return OTP directly so user can still register
-    console.log(`[OTP] ${email} => ${otp}`);
-    return res.json({
-      message: 'OTP generated (email not configured — use the code below)',
-      otp // visible in response when email not set up
-    });
-
-  } catch (err) {
-    console.error('Send OTP error:', err.message);
-    res.status(500).json({ message: 'Server error: ' + err.message });
-  }
-};
-
-// Step 2: Verify OTP
-exports.verifyOTP = async (req, res) => {
-  try {
-    const { email, otp } = req.body;
-    const record = await OTP.findOne({ email: email.toLowerCase(), otp });
-
-    if (!record) return res.status(400).json({ message: 'Invalid OTP' });
-    if (new Date() > record.expiresAt) return res.status(400).json({ message: 'OTP expired. Request a new one.' });
-
-    // Mark as verified
-    await OTP.findByIdAndUpdate(record._id, { verified: true });
-    res.json({ message: 'Email verified', verified: true });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
 exports.register = async (req, res) => {
   try {
@@ -80,31 +16,45 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Invalid role' });
     }
 
-    // Check OTP was verified
-    const otpRecord = await OTP.findOne({ email: email.toLowerCase(), verified: true });
-    if (!otpRecord) {
-      return res.status(400).json({ message: 'Email not verified. Please verify your email with OTP first.' });
+    // Validate email format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
     }
 
+    // Check if email already exists
     const emailExists = await User.findOne({ email: email.toLowerCase() });
     if (emailExists) return res.status(400).json({ message: 'Email already registered' });
 
+    // Check if phone already exists
     const phoneExists = await User.findOne({ phone });
     if (phoneExists) return res.status(400).json({ message: 'Phone number already registered' });
 
+    // Create user directly without OTP verification
     const user = await User.create({
-      name, email: email.toLowerCase(), phone, password, role,
-      isVerified: true, // email verified via OTP
+      name, 
+      email: email.toLowerCase(), 
+      phone, 
+      password, 
+      role,
+      isVerified: true, // Auto-verify since no OTP
       location: location || { type: 'Point', coordinates: [0, 0] }
     });
 
+    // Create role-specific profile
     if (role === 'donor') {
       const { bloodType, age, weight, healthInfo, priorityAlertOptIn } = req.body;
       if (!bloodType || !age || !weight) {
         await User.findByIdAndDelete(user._id);
         return res.status(400).json({ message: 'Donor requires bloodType, age and weight' });
       }
-      await Donor.create({ user: user._id, bloodType, age: parseInt(age), weight: parseFloat(weight), healthInfo: healthInfo || {}, priorityAlertOptIn: priorityAlertOptIn || false });
+      await Donor.create({ 
+        user: user._id, 
+        bloodType, 
+        age: parseInt(age), 
+        weight: parseFloat(weight), 
+        healthInfo: healthInfo || {}, 
+        priorityAlertOptIn: priorityAlertOptIn || false 
+      });
     }
 
     if (role === 'hospital') {
@@ -113,11 +63,14 @@ exports.register = async (req, res) => {
         await User.findByIdAndDelete(user._id);
         return res.status(400).json({ message: 'Hospital requires hospitalName and licenseNumber' });
       }
-      await Hospital.create({ user: user._id, name: hospitalName, licenseNumber, address: address || '', location: location || { type: 'Point', coordinates: [0, 0] } });
+      await Hospital.create({ 
+        user: user._id, 
+        name: hospitalName, 
+        licenseNumber, 
+        address: address || '', 
+        location: location || { type: 'Point', coordinates: [0, 0] } 
+      });
     }
-
-    // Clean up OTP
-    await OTP.deleteMany({ email: email.toLowerCase() });
 
     res.status(201).json({
       token: generateToken(user._id),
